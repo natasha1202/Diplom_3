@@ -79,6 +79,7 @@ class ConstructorPage(BasePage):
 
     @allure.step('Создать заказ')
     def create_new_order(self):
+        self.wait_for_element(MainPageLocators.FORM_BURGER_TEXT)
         self.form_burger()
         self.click_on_element(MainPageLocators.SUBMIT_ORDER_BUTTON)
 

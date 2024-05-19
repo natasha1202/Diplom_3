@@ -12,7 +12,7 @@ class TestNavigation:
                         'оказывается на главной странице ')
     @pytest.mark.parametrize('br_driver',
                              ['chrome_driver', 'firefox_driver'])
-    def test_click_on_constructor(self, registered_user, request, br_driver):
+    def test_click_on_constructor(self, request, br_driver):
         driver = request.getfixturevalue(br_driver)
         constructor_page = ConstructorPage(driver)
         headers_page = HeadersPage(driver)
@@ -26,7 +26,7 @@ class TestNavigation:
                         'оказывается на странице с лентой заказов')
     @pytest.mark.parametrize('br_driver',
                              ['chrome_driver', 'firefox_driver'])
-    def test_click_on_order_feed(self, registered_user, request, br_driver):
+    def test_click_on_order_feed(self, request, br_driver):
         driver = request.getfixturevalue(br_driver)
         constructor_page = ConstructorPage(driver)
         headers_page = HeadersPage(driver)

@@ -44,7 +44,7 @@ class TestConstructor:
                         'Для булок счетчик увеличивается на 2, для соусов и начинок на 1.')
     @pytest.mark.parametrize('br_driver',
                              ['chrome_driver', 'firefox_driver'])
-    def test_check_ingredient_counter(self, registered_user, request, br_driver):
+    def test_check_ingredient_counter(self, request, br_driver):
         driver = request.getfixturevalue(br_driver)
         constructor_page = ConstructorPage(driver)
         constructor_page.open_main_page()
