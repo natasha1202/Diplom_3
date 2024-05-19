@@ -17,12 +17,11 @@ class ApiHelper:
         random_string = ''.join(random.choice(letters) for i in range(length))
         return random_string
 
-    @staticmethod
     @allure.step('Генерируется новый зарегистрированный пользователь')
-    def register_new_user_and_return_login_password():
-        username = f'k5{ApiHelper.generate_random_string(12)}'
+    def register_new_user_and_return_login_password(self):
+        username = f'k5{self.generate_random_string(12)}'
         email = f'{username}@ya.ru'
-        password = ApiHelper.generate_random_string(10)
+        password = self.generate_random_string(10)
 
         payload = {
             "email": email,
@@ -34,10 +33,9 @@ class ApiHelper:
         if response.status_code == 200:
             return payload
 
-    @staticmethod
     @allure.step('Удаление созданного пользователя')
-    def delete_user(user):
-        token = ApiHelper.login_as_user(user)
+    def delete_user(self, user):
+        token = self.login_as_user(user)
         headers = {"Authorization": token}
         requests.delete(ApiUrl.DELETE_USER_URL, headers=headers)
 
@@ -48,12 +46,11 @@ class ApiHelper:
         access_token = response.json()['accessToken']
         return access_token
 
-    @staticmethod
     @allure.step('Создание нового заказа под зарегестрированным пользовтелем')
-    def create_new_order_by_logged_user_and_return_user(user_data):
+    def create_new_order_by_logged_user_and_return_user(self, user_data):
         order = OrderGenerator.generate_new_order()
 
-        token = ApiHelper.login_as_user(user_data)
+        token = self.login_as_user(user_data)
         headers = {"Authorization": token}
 
         response = requests.post(ApiUrl.CREATE_ORDER_URL, headers=headers, data=order)

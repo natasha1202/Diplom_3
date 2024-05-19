@@ -2,6 +2,7 @@ import pytest
 from selenium import webdriver
 
 from api_methods.api_helper import ApiHelper
+from data import Data
 
 
 @pytest.fixture(scope='function')
@@ -20,23 +21,19 @@ def firefox_driver():
 
 @pytest.fixture(scope='function')
 def user():
-    user = {'email': 'test@ya.ru',
-            'password': 'test05',
-            'user_name': 'test5'
-            }
-    return user
+    return Data.user
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope='function')
 def registered_user():
-    new_user = ApiHelper.register_new_user_and_return_login_password()
+    api_helper = ApiHelper()
+    new_user = api_helper.register_new_user_and_return_login_password()
     yield new_user
-    ApiHelper.delete_user(new_user)
+    api_helper.delete_user(new_user)
 
 
-@pytest.fixture(scope='function', autouse=True)
-def create_and_delete_user_with_order():
-    new_user = ApiHelper.register_new_user_and_return_login_password()
-    ApiHelper.create_new_order_by_logged_user_and_return_user(new_user)
-    yield new_user
-    ApiHelper.delete_user(new_user)
+@pytest.fixture(scope='function')
+def create_and_delete_user_with_order(registered_user):
+    api_helper = ApiHelper()
+    api_helper.create_new_order_by_logged_user_and_return_user(registered_user)
+    return registered_user

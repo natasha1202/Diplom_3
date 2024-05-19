@@ -1,4 +1,5 @@
 import allure
+from selenium.webdriver import ActionChains
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -10,10 +11,17 @@ class BasePage:
 
     @allure.step("Найти элемент с ожиданием")
     def find_element_with_wait(self, locator):
-        WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(
-            locator
-        ))
+        self.wait_for_element(locator)
         return self.driver.find_element(*locator)
+
+    @allure.step("Найти элемент без ожидания")
+    def find_element_without_wait(self, locator):
+        return self.driver.find_element(*locator)
+
+    @allure.step("Найти все элементы по локатору")
+    def list_elements(self, locator):
+        elements = self.driver.find_elements(*locator)
+        return elements
 
     @allure.step("Кликнуть на элемент")
     def click_on_element(self, locator):
@@ -52,11 +60,9 @@ class BasePage:
         return page
 
     @allure.step("Открыть страницу кликнув на элемент")
-    def open_page(self, locator, page_url, page):
-        page.go_to_page(page_url)
-        WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(
-            locator
-        ))
+    def open_page(self, locator, page_url):
+        page = self.go_to_page(page_url)
+        self.wait_for_element(locator)
         self.wait()
         return page
 
@@ -66,4 +72,10 @@ class BasePage:
             locator
         ))
         return self.driver.find_element(*locator).is_displayed()
+
+    @allure.step('Перетащить элемент')
+    def drag_element(self, moving_element, area_to_move):
+        destination_element = self.find_element_with_wait(area_to_move)
+        action = ActionChains(self.driver)
+        action.drag_and_drop(moving_element, destination_element).perform()
 

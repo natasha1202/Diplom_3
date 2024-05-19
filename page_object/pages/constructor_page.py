@@ -1,38 +1,46 @@
 from random import choice
 
 import allure
-from selenium.webdriver import ActionChains
-from selenium.webdriver.common.by import By
 
 from page_object.page_locators.main_page_locators import MainPageLocators
 from page_object.pages.base_page import BasePage
+from page_url import PageUrl
 
 
 class ConstructorPage(BasePage):
 
+    @allure.step("Открыть главную страницу")
+    def open_main_page(self):
+        locator = MainPageLocators.FORM_BURGER_TEXT
+        self.open_page(locator, PageUrl.BASE_PAGE_URL)
+
     @allure.step('Выбор произвольного ингрелиента')
     def choose_any_ingredient_from_list(self):
-        ingredients = self.driver.find_elements(*MainPageLocators.INGREDIENTS_LIST)
+        ingredients = self.list_elements(MainPageLocators.INGREDIENTS_LIST)
         selected_ingredient = choice(ingredients)
         return selected_ingredient
 
     @allure.step('Выбор булки')
     def choose_bun_from_list(self):
-        buns = self.driver.find_elements(*MainPageLocators.BUNS_LIST)
+        buns = self.list_elements(MainPageLocators.BUNS_LIST)
         selected_ingredient = choice(buns)
         return selected_ingredient
 
     @allure.step('Выбор соуса')
     def choose_sauce_from_list(self):
-        sauces = self.driver.find_elements(*MainPageLocators.SAUCES_LIST)
+        sauces = self.list_elements(MainPageLocators.SAUCES_LIST)
         selected_ingredient = choice(sauces)
         return selected_ingredient
 
     @allure.step('Выбор начинки')
     def choose_fillings_from_list(self):
-        fillings = self.driver.find_elements(*MainPageLocators.FILLINGS_LIST)
+        fillings = self.list_elements(MainPageLocators.FILLINGS_LIST)
         selected_ingredient = choice(fillings)
         return selected_ingredient
+
+    @allure.step('Закрыть pop-up с описанием ингредиента')
+    def ingredient_details_close_popup(self):
+        self.click_on_element(MainPageLocators.CLOSE_DETAILS_BUTTON)
 
     @allure.step('Проверка, показывается ли pop-up')
     def is_pop_up_shown(self):
@@ -40,9 +48,7 @@ class ConstructorPage(BasePage):
 
     @allure.step('Перетащить элемент')
     def drag_ingredient(self, moving_element):
-        destination_element = self.find_element_with_wait(MainPageLocators.DRAG_AREA)
-        action = ActionChains(self.driver)
-        action.drag_and_drop(moving_element, destination_element).perform()
+        self.drag_element(moving_element, MainPageLocators.DRAG_AREA)
 
     @allure.step('Определение ожидаемго зачения счетчика')
     def define_expected_counter_value(self):
@@ -56,7 +62,7 @@ class ConstructorPage(BasePage):
     @staticmethod
     @allure.step('Получить значение счетчика ингредиента')
     def get_actual_counter(element):
-        p_element = element.find_element(By.XPATH, ".//div[contains(@class, 'counter')]/p")
+        p_element = element.find_element(*MainPageLocators.INGREDIENT_COUNTER)
         return int(p_element.text)
 
     @allure.step('Сформировать бургер для заказа')
@@ -87,15 +93,17 @@ class ConstructorPage(BasePage):
         element.click()
 
     @allure.step('Получить номер нового заказа')
-    def get_order_umber(self):
+    def get_order_number(self):
         order_number = self.get_text_from_element(MainPageLocators.ORDER_NUMBER)
         while order_number == '9999':
             order_number = self.get_text_from_element(MainPageLocators.ORDER_NUMBER)
         return order_number
 
+    @allure.step('Найти заголовок всплывающего окна "Детали ингредиента"')
+    def find_ingredient_details_popup_header(self):
+        return self.get_text_from_element(MainPageLocators.INGREDIENT_DETAILS)
 
-
-
-
-
+    @allure.step('Найти текст "Ваш заказ начали готовить"')
+    def find_order_success_message(self):
+        return self.get_text_from_element(MainPageLocators.ORDER_INFO_SUCCESS)
 

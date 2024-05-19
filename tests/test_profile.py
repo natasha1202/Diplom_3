@@ -1,11 +1,9 @@
 import allure
 import pytest
 
-from page_object.page_locators.headers_page_locators import HeadersPageLocators
-from page_object.page_locators.login_page_locators import LoginPageLocators
-from page_object.page_locators.profile_page_locators import ProfilePageLocators
+from page_object.pages.constructor_page import ConstructorPage
+from page_object.pages.headers_page import HeadersPage
 from page_object.pages.login_page import LoginPage
-from page_object.pages.main_page import MainPage
 from page_object.pages.profile_page import ProfilePage
 
 
@@ -20,10 +18,12 @@ class TestProfile:
         driver = request.getfixturevalue(br_driver)
         profile_page = ProfilePage(driver)
         login_page = LoginPage(driver)
+        headers_page = HeadersPage(driver)
+
         login_page.open_login_page()
         login_page.login(registered_user)
-        login_page.click_on_element(HeadersPageLocators.PROFILE_LINK)
-        element = profile_page.find_element_with_wait(ProfilePageLocators.PROFILE_INFO_TEXT)
+        headers_page.click_on_profile()
+        element = profile_page.find_profile_text_element()
         assert element.text == 'В этом разделе вы можете изменить свои персональные данные'
 
     @allure.title('Переход в профиль по нажатию на надпись "Профиль" для неавторизованного пользователя')
@@ -33,12 +33,13 @@ class TestProfile:
                              ['chrome_driver', 'firefox_driver'])
     def test_click_on_profile_link_without_authorization(self, request, br_driver):
         driver = request.getfixturevalue(br_driver)
-        profile_page = ProfilePage(driver)
-        main_page = MainPage(driver)
-        main_page.open_main_page()
-        main_page.click_on_element(HeadersPageLocators.PROFILE_LINK)
-        element = profile_page.find_element_with_wait(LoginPageLocators.LOGIN_HEADER_TEXT)
-        assert element.text == 'Вход'
+        constructor_page = ConstructorPage(driver)
+        headers_page = HeadersPage(driver)
+
+        constructor_page.open_main_page()
+        headers_page.click_on_profile()
+        header = headers_page.find_login_header()
+        assert header.text == 'Вход'
 
     @allure.title('Переход в историю заказов в профиле пользователя')
     @allure.description('Авторизованный пользователь и находится на главной странице. '
@@ -49,12 +50,14 @@ class TestProfile:
         driver = request.getfixturevalue(br_driver)
         profile_page = ProfilePage(driver)
         login_page = LoginPage(driver)
+        headers_page = HeadersPage(driver)
+
         login_page.open_login_page()
         login_page.login(registered_user)
-        login_page.click_on_element(HeadersPageLocators.PROFILE_LINK)
-        profile_page.click_on_element(ProfilePageLocators.PROFILE_ORDERS_HISTORY)
-        assert ("Account_link_active" in
-                driver.find_element(*ProfilePageLocators.PROFILE_ORDERS_HISTORY).get_dom_attribute("class"))
+        headers_page.click_on_profile()
+        profile_page.click_on_history()
+        order = profile_page.find_users_orders()
+        assert ("Account_link_active" in order.get_dom_attribute("class"))
 
     @allure.title('Авторизованный пользоваетль выходит из системы со страницы профиля')
     @allure.description('Авторизованный пользователь переходит на страницу профиля. '
@@ -65,12 +68,14 @@ class TestProfile:
         driver = request.getfixturevalue(br_driver)
         profile_page = ProfilePage(driver)
         login_page = LoginPage(driver)
+        headers_page = HeadersPage(driver)
+
         login_page.open_login_page()
         login_page.login(registered_user)
-        login_page.click_on_element(HeadersPageLocators.PROFILE_LINK)
-        profile_page.click_on_element(ProfilePageLocators.LOGOUT_BUTTON_PROFILE)
-        element = profile_page.find_element_with_wait(LoginPageLocators.LOGIN_HEADER_TEXT)
-        assert element.text == 'Вход'
+        headers_page.click_on_profile()
+        profile_page.logout()
+        header = headers_page.find_login_header()
+        assert header.text == 'Вход'
 
 
 

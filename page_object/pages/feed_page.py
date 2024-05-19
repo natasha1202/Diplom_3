@@ -12,12 +12,11 @@ class FeedPage(BasePage):
     @allure.step("Открыть страницу Лента заказов")
     def open_feed_page(self):
         locator = FeedPageLocators.FEED_HEADER_TEXT
-        feed_page = FeedPage(self.driver)
-        feed_page.open_page(locator, PageUrl.FEED_PAGE_URL, feed_page)
+        self.open_page(locator, PageUrl.FEED_PAGE_URL)
 
     @allure.step("Выбрать заказ из списка")
     def choose_order_from_list(self):
-        order = self.driver.find_elements(*FeedPageLocators.ORDER_LIST)
+        order = self.list_elements(FeedPageLocators.ORDER_LIST)
         selected_order = choice(order)
         return selected_order
 
@@ -31,7 +30,16 @@ class FeedPage(BasePage):
     @allure.step("Найти заказ по номеру")
     def find_order_by_number(self, number, page_locator):
         order_locator = self.calculate_locator(number, page_locator)
-        order = self.driver.find_element(*order_locator)
+        order = self.find_element_without_wait(order_locator)
         return order
+
+    @allure.step("Найти заказ по номеру")
+    def set_order_locator(self):
+        return FeedPageLocators.ORDER_BY_NUMBER
+
+    @allure.step("Найти Popup с информацией по заказу")
+    def find_popup_order_details(self):
+        return self.find_element_with_wait(FeedPageLocators.MODAL_ORDER_FORM)
+
 
 

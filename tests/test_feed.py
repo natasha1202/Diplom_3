@@ -24,7 +24,7 @@ class TestFeed:
         order = feed_page.choose_order_from_list()
         order.click()
 
-        element = feed_page.find_element_with_wait(FeedPageLocators.MODAL_ORDER_FORM)
+        element = feed_page.find_popup_order_details()
         assert element.is_displayed()
 
     @allure.title('Проверка, что заказ из истории заказов отображается в ленте')
@@ -47,7 +47,7 @@ class TestFeed:
         user_order_number = profile_page.choose_order_from_history()
 
         headers_page.go_to_feed()
-        order_locator = feed_page.calculate_locator(user_order_number, FeedPageLocators.ORDER_BY_NUMBER)
+        order_locator = feed_page.calculate_locator(user_order_number, feed_page.set_order_locator())
 
         order = feed_page.find_element_with_wait(order_locator)
 
@@ -102,10 +102,10 @@ class TestFeed:
         login_page.login(registered_user)
 
         constructor_page.create_new_order()
-        order_number = constructor_page.get_order_umber()
+        order_number = constructor_page.get_order_number()
 
         constructor_page.new_order_close_popup()
         headers_page.go_to_feed()
 
-        order_element = feed_page.find_order_by_number(order_number, FeedPageLocators.ORDER_BY_NUMBER)
+        order_element = feed_page.find_order_by_number(order_number, feed_page.set_order_locator())
         assert order_element.is_displayed() is True

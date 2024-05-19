@@ -1,7 +1,6 @@
 import allure
 import pytest
 
-from page_object.page_locators.main_page_locators import MainPageLocators
 from page_object.pages.constructor_page import ConstructorPage
 from page_object.pages.login_page import LoginPage
 
@@ -23,7 +22,7 @@ class TestOrders:
         login_page.login(registered_user)
 
         constructor_page.create_new_order()
+        info_text = constructor_page.find_order_success_message()
 
-        assert (constructor_page.find_element_with_wait(MainPageLocators.ORDER_INFO_SUCCESS).text ==
-                'Ваш заказ начали готовить')
+        assert info_text == 'Ваш заказ начали готовить'
 

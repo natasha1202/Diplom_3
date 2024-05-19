@@ -6,7 +6,7 @@ class MainPageLocators:
     # заголовок Соберите бургер
     FORM_BURGER_TEXT = By.XPATH, ".//h1[contains(text(),'Соберите бургер')]"
 
-    # Список всех интгредиентов на странице
+    # Список всех ингредиентов на странице
     INGREDIENTS_LIST = By.XPATH, ".//a[contains(@href, '/ingredient/')]"
     # Список булок
     BUNS_LIST = By.XPATH, ".//p[contains(text(),'булка')]/parent::a"
@@ -14,6 +14,9 @@ class MainPageLocators:
     SAUCES_LIST = By.XPATH, ".//p[contains(text(),'Соус')]/parent::a"
     # Список начинок
     FILLINGS_LIST = By.XPATH, ".//h2[contains(text(),'Начинки')]/following-sibling::ul/a"
+
+    # Счетчик количества ингредиента в заказе
+    INGREDIENT_COUNTER = By.XPATH, ".//div[contains(@class, 'counter')]/p"
 
     # Поле для перетаскивания ингредиентов
     DRAG_AREA = By.XPATH, ".//span[@class='constructor-element__row']"

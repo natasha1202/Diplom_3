@@ -1,9 +1,7 @@
 import allure
 import pytest
 
-from page_object.page_locators.main_page_locators import MainPageLocators
 from page_object.pages.constructor_page import ConstructorPage
-from page_object.pages.main_page import MainPage
 
 
 class TestConstructor:
@@ -15,14 +13,13 @@ class TestConstructor:
                              ['chrome_driver', 'firefox_driver'])
     def test_click_on_ingredient(self, request, br_driver):
         driver = request.getfixturevalue(br_driver)
-        main_page = MainPage(driver)
         constructor_page = ConstructorPage(driver)
-        main_page.open_main_page()
+        constructor_page.open_main_page()
 
         ingredient = constructor_page.choose_any_ingredient_from_list()
         ingredient.click()
-        element = constructor_page.find_element_with_wait(MainPageLocators.INGREDIENT_DETAILS)
-        assert element.text == 'Детали ингредиента'
+        header_text = constructor_page.find_ingredient_details_popup_header()
+        assert header_text == 'Детали ингредиента'
 
     @allure.title('Проверка кнопки закрыть окно с детальным описанием ингредиента')
     @allure.description('Пользователь находится на главной странице, кликает по произвольному ингредиенту. '
@@ -32,17 +29,16 @@ class TestConstructor:
                              ['chrome_driver', 'firefox_driver'])
     def test_close_popup_ingredient_details(self,request, br_driver):
         driver = request.getfixturevalue(br_driver)
-        main_page = MainPage(driver)
         constructor_page = ConstructorPage(driver)
-        main_page.open_main_page()
+        constructor_page.open_main_page()
 
         ingredient = constructor_page.choose_any_ingredient_from_list()
         ingredient.click()
-        main_page.click_on_element(MainPageLocators.CLOSE_DETAILS_BUTTON)
+        constructor_page.ingredient_details_close_popup()
         assert constructor_page.is_pop_up_shown() is False
 
     @allure.title('Проверка счетчика количества ингредиентов, добавленных в заказ')
-    @allure.description('Пользователь находится на главной странице, перетаскавает произвольный ингредиент в поле '
+    @allure.description('Пользователь находится на главной странице, перетаскивает произвольный ингредиент в поле '
                         'заказа. '
                         'Счетчик над ингредиентом увеличивается. '
                         'Для булок счетчик увеличивается на 2, для соусов и начинок на 1.')
@@ -50,9 +46,8 @@ class TestConstructor:
                              ['chrome_driver', 'firefox_driver'])
     def test_check_ingredient_counter(self, registered_user, request, br_driver):
         driver = request.getfixturevalue(br_driver)
-        main_page = MainPage(driver)
         constructor_page = ConstructorPage(driver)
-        main_page.open_main_page()
+        constructor_page.open_main_page()
 
         ingredient = constructor_page.choose_any_ingredient_from_list()
         constructor_page.drag_ingredient(ingredient)

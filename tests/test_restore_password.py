@@ -1,7 +1,6 @@
 import allure
 import pytest
 
-from page_object.page_locators.restore_page_locators import RestorePageLocators
 from page_object.pages.login_page import LoginPage
 from page_object.pages.restore_page import RestorePage
 from page_url import PageUrl
@@ -20,7 +19,8 @@ class TestRestorePage:
         login_page = LoginPage(driver)
         login_page.open_login_page()
         restore_page.go_to_restore_pwd_page_from_login_page()
-        assert restore_page.get_text_from_element(RestorePageLocators.RESTORE_PWD_HEADER) == 'Восстановление пароля'
+        restore_header = restore_page.find_restore_header()
+        assert restore_header == 'Восстановление пароля'
 
     @allure.title('Ввод емейла на странице восстановления пароля и переход на страницу смены пароля')
     @allure.description('Пользователь находится на странице восстановления пароля. '
@@ -32,8 +32,8 @@ class TestRestorePage:
         driver = request.getfixturevalue(br_driver)
         restore_page = RestorePage(driver)
         restore_page.open_restore_page()
-        restore_page.go_to_reset_pwd_page(registered_user, RestorePageLocators.SAVE_BUTTON)
-        assert (restore_page.find_element_with_wait(RestorePageLocators.ENTER_OTP_FROM_EMAIL_HINT) and
+        restore_page.go_to_reset_pwd_page(registered_user)
+        assert (restore_page.find_restore_otp() and
                 driver.current_url == PageUrl.RESET_PAGE_URL)
 
     @allure.title('Проверка отображения пароля в явном виде')
@@ -47,12 +47,11 @@ class TestRestorePage:
         driver = request.getfixturevalue(br_driver)
         restore_page = RestorePage(driver)
         restore_page.open_restore_page()
-        restore_page.go_to_reset_pwd_page(user, RestorePageLocators.SAVE_BUTTON)
+        restore_page.go_to_reset_pwd_page(user)
 
-        restore_page.wait_for_element(RestorePageLocators.EYE_ICON)
-        restore_page.set_text_to_element(RestorePageLocators.PWD_INPUT_FIELD, user.get('password'))
-        restore_page.click_on_element(RestorePageLocators.EYE_ICON)
-        element = driver.find_element(*RestorePageLocators.PWD_SHOW_MARK)
+        restore_page.enter_new_password(user)
+        restore_page.click_on_eye_icon()
+        element = restore_page.get_shown_mark()
 
         assert element.get_dom_attribute("type") == 'text'
 
