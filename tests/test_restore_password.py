@@ -18,7 +18,8 @@ class TestRestorePage:
         restore_page = RestorePage(driver)
         login_page = LoginPage(driver)
         login_page.open_login_page()
-        restore_page.go_to_restore_pwd_page_from_login_page()
+        login_page.go_to_restore_pwd_page_from_login_page()
+        restore_page.check_restore_page_opened()
         restore_header = restore_page.find_restore_header()
         assert restore_header == 'Восстановление пароля'
 

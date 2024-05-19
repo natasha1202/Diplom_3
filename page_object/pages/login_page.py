@@ -19,4 +19,10 @@ class LoginPage(BasePage):
         self.set_text_to_element(LoginPageLocators.LOGIN_PASSWORD, user.get('password'))
         self.click_on_element(LoginPageLocators.LOGIN_FORM_LOGIN_BUTTON)
 
+    @allure.step("Перейти на страницу восстановления пароля")
+    def go_to_restore_pwd_page_from_login_page(self):
+        self.wait_for_element(LoginPageLocators.RESTORE_PWD_LINK)
+        self.click_on_element(LoginPageLocators.RESTORE_PWD_LINK)
+
+
 

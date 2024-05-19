@@ -16,16 +16,13 @@ class RestorePage(BasePage):
     @allure.step("Перейти на страницу ввода нового пароля для восстановления пароля")
     def go_to_reset_pwd_page(self, user):
         self.set_text_to_element(RestorePageLocators.EMAIL_INPUT_FIELD, user.get('email'))
-        self.wait_for_element(RestorePageLocators.RESTORE_BUTTON)
+        self.check_restore_page_opened()
         self.click_on_element(RestorePageLocators.RESTORE_BUTTON)
         self.wait_for_element(RestorePageLocators.SAVE_BUTTON)
 
-    @allure.step("Перейти на страницу восстановления пароля")
-    def go_to_restore_pwd_page_from_login_page(self):
-        self.wait_for_element(LoginPageLocators.RESTORE_PWD_LINK)
-        self.click_on_element(LoginPageLocators.RESTORE_PWD_LINK)
+    @allure.step("Проверить, что открылась страница восстановления пароля")
+    def check_restore_page_opened(self):
         self.wait_for_element(RestorePageLocators.RESTORE_BUTTON)
-        self.click_on_element(RestorePageLocators.RESTORE_BUTTON)
 
     @allure.step('Найти заголовок Восстановление пароля')
     def find_restore_header(self):
