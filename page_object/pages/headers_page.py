@@ -43,11 +43,11 @@ class HeadersPage(BasePage):
         element = self.find_element_with_wait(FeedPageLocators.FEED_HEADER_TEXT)
         return element.text
 
-    @allure.step('Кликнуть на надпись "Профиль"')
+    @allure.step('Кликнуть на надпись "Лента заказов"')
     def click_on_feed(self):
         self.click_on_element(HeadersPageLocators.FEED_LINK)
 
-    @allure.step('Кликнуть на заголовок "Лента заказов"')
+    @allure.step('Кликнуть на заголовок "Профиль"')
     def click_on_profile(self):
         self.click_on_element(HeadersPageLocators.PROFILE_LINK)
 

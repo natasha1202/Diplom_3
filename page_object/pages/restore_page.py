@@ -1,6 +1,5 @@
 import allure
 
-from page_object.page_locators.login_page_locators import LoginPageLocators
 from page_object.page_locators.restore_page_locators import RestorePageLocators
 from page_object.pages.base_page import BasePage
 from page_url import PageUrl
