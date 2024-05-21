@@ -24,5 +24,9 @@ class LoginPage(BasePage):
         self.wait_for_element(LoginPageLocators.RESTORE_PWD_LINK)
         self.click_on_element(LoginPageLocators.RESTORE_PWD_LINK)
 
+    @allure.step('Найти заголовок Вход')
+    def find_login_header(self):
+        return self.find_element_with_wait(LoginPageLocators.LOGIN_HEADER_TEXT)
+
 
 

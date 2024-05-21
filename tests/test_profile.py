@@ -35,10 +35,11 @@ class TestProfile:
         driver = request.getfixturevalue(br_driver)
         constructor_page = ConstructorPage(driver)
         headers_page = HeadersPage(driver)
+        login_page = LoginPage(driver)
 
         constructor_page.open_main_page()
         headers_page.click_on_profile()
-        header = headers_page.find_login_header()
+        header = login_page.find_login_header()
         assert header.text == 'Вход'
 
     @allure.title('Переход в историю заказов в профиле пользователя')
@@ -74,7 +75,7 @@ class TestProfile:
         login_page.login(registered_user)
         headers_page.click_on_profile()
         profile_page.logout()
-        header = headers_page.find_login_header()
+        header = login_page.find_login_header()
         assert header.text == 'Вход'
 
 

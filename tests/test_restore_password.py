@@ -1,6 +1,7 @@
 import allure
 import pytest
 
+from data import Data
 from page_object.pages.login_page import LoginPage
 from page_object.pages.restore_page import RestorePage
 from page_url import PageUrl
@@ -29,11 +30,12 @@ class TestRestorePage:
                         'нового пароля')
     @pytest.mark.parametrize('br_driver',
                              ['chrome_driver', 'firefox_driver'])
-    def test_restore_password_enter_email_and_click_restore(self, registered_user, request, br_driver):
+    def test_restore_password_enter_email_and_click_restore(self, request, br_driver):
+        user = Data.user
         driver = request.getfixturevalue(br_driver)
         restore_page = RestorePage(driver)
         restore_page.open_restore_page()
-        restore_page.go_to_reset_pwd_page(registered_user)
+        restore_page.go_to_reset_pwd_page(user)
         assert (restore_page.find_restore_otp() and
                 driver.current_url == PageUrl.RESET_PAGE_URL)
 
@@ -44,7 +46,8 @@ class TestRestorePage:
                         'Вместо точек в поле пароль отображается введенный пароль')
     @pytest.mark.parametrize('br_driver',
                              ['chrome_driver', 'firefox_driver'])
-    def test_restore_password_click_on_show_pwd(self, user, request, br_driver):
+    def test_restore_password_click_on_show_pwd(self, request, br_driver):
+        user = Data.user
         driver = request.getfixturevalue(br_driver)
         restore_page = RestorePage(driver)
         restore_page.open_restore_page()

@@ -2,7 +2,6 @@ import pytest
 from selenium import webdriver
 
 from api_methods.api_helper import ApiHelper
-from data import Data
 
 
 @pytest.fixture(scope='function')
@@ -17,11 +16,6 @@ def firefox_driver():
     driver = webdriver.Firefox()
     yield driver
     driver.quit()
-
-
-@pytest.fixture(scope='function')
-def user():
-    return Data.user
 
 
 @pytest.fixture(scope='function')

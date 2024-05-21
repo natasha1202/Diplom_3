@@ -18,7 +18,7 @@ class ProfilePage(BasePage):
         order = self.find_element_with_wait(ProfilePageLocators.HISTORY_ORDER_NUMBERS_LIST)
         return order.text
 
-    @allure.step('Найти заголовок конструктора бургеров')
+    @allure.step('Найти текст "В этом разделе вы можете изменить свои персональные данные"')
     def find_profile_text_element(self):
         return self.find_element_with_wait(ProfilePageLocators.PROFILE_INFO_TEXT)
 

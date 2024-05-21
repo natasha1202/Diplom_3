@@ -108,3 +108,7 @@ class ConstructorPage(BasePage):
     def find_order_success_message(self):
         return self.get_text_from_element(MainPageLocators.ORDER_INFO_SUCCESS)
 
+    @allure.step('Найти заголовок конструктора бургеров')
+    def find_constructor_burger_text(self):
+        return self.get_text_from_element(MainPageLocators.FORM_BURGER_TEXT)
+

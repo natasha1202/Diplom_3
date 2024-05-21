@@ -47,7 +47,7 @@ class TestFeed:
         user_order_number = profile_page.choose_order_from_history()
 
         headers_page.go_to_feed()
-        order_locator = feed_page.calculate_locator(user_order_number, feed_page.set_order_locator())
+        order_locator = feed_page.calculate_order_locator(user_order_number)
 
         order = feed_page.find_element_with_wait(order_locator)
 
@@ -107,5 +107,5 @@ class TestFeed:
         constructor_page.new_order_close_popup()
         headers_page.go_to_feed()
 
-        order_element = feed_page.find_order_by_number(order_number, feed_page.set_order_locator())
+        order_element = feed_page.find_order_by_number(order_number)
         assert order_element.is_displayed() is True
